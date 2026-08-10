@@ -1,0 +1,88 @@
+apiVersion: scaffolder.backstage.io/v1beta3
+kind: Template
+metadata:
+  name: java-spring-boot-mvp
+  title: Java Spring Boot MVP
+  description: Scaffolds a minimal Java Spring Boot service with health check, Dockerfile, CI, and catalog registration.
+  tags:
+    - java
+    - spring-boot
+    - mvp
+spec:
+  owner: platform-engineering
+  type: service
+
+  # ---- Fields shown to the developer in the IDP self-service form ----
+  parameters:
+    - title: Basic service info
+      required:
+        - name
+        - owner
+      properties:
+        name:
+          title: Service name
+          type: string
+          description: Unique name for the new service (used as repo name)
+          ui:autofocus: true
+        description:
+          title: Description
+          type: string
+          description: What does this service do?
+        owner:
+          title: Owner
+          type: string
+          description: Team or user that owns this service
+          ui:field: OwnerPicker
+          ui:options:
+            catalogFilter:
+              kind: Group
+
+    - title: Repository location
+      required:
+        - repoUrl
+      properties:
+        repoUrl:
+          title: Repository location
+          type: string
+          ui:field: RepoUrlPicker
+          ui:options:
+            allowedHosts:
+              - github.com
+
+  # ---- What happens after the developer submits the form ----
+  steps:
+    - id: fetch-skeleton
+      name: Fetch skeleton code
+      action: fetch:template
+      input:
+        url: ./skeleton
+        values:
+          name: ${{ parameters.name }}
+          description: ${{ parameters.description }}
+          owner: ${{ parameters.owner }}
+          destination: ${{ parameters.repoUrl | parseRepoUrl }}
+
+    - id: publish
+      name: Push to GitHub
+      action: publish:github
+      input:
+        allowedHosts: ['github.com']
+        description: ${{ parameters.description }}
+        repoUrl: ${{ parameters.repoUrl }}
+        defaultBranch: main
+
+    - id: register
+      name: Register in software catalog
+      action: catalog:register
+      input:
+        repoContentsUrl: ${{ steps['publish'].output.repoContentsUrl }}
+        catalogInfoPath: /catalog-info.yaml
+
+  # ---- What the developer sees after the pipeline finishes ----
+  output:
+    links:
+      - title: Repository
+        url: ${{ steps['publish'].output.remoteUrl }}
+      - title: Open in catalog
+        icon: catalog
+        entityRef: ${{ steps['register'].output.entityRef }}
