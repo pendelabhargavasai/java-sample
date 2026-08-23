@@ -19,45 +19,25 @@ The current environment structure includes `dev` and `prod`.
 ## 2. REPOSITORY STRUCTURE
 
 ``` text
-
 .github/
-
 └── workflows/
-
-├── delegate-image.yaml
-
-└── vendor-delegate-image.yaml
-
-  
+    ├── delegate-image.yaml
+    └── vendor-delegate-image.yaml
 
 delegate-image-download/
-
 ├── config/
-
-│ ├── dev/
-
-│ │ └── values.yaml
-
-│ └── prod/
-
-│ └── values.yaml
-
+│   ├── dev/
+│   │   └── values.yaml
+│   └── prod/
+│       └── values.yaml
 ├── templates/
-
-│ ├── clusterrolebinding.yaml
-
-│ ├── deployment.yaml
-
-│ └── secret.yaml
-
+│   ├── clusterrolebinding.yaml
+│   ├── deployment.yaml
+│   └── secret.yaml
 ├── Chart.yaml
-
 ├── Dockerfile
-
 ├── pipeline.json
-
 └── README.md
-
 ```
 
 
