@@ -232,7 +232,7 @@ The exact downstream behavior is controlled by the shared vendor_base_images.yam
 12. Process the scan results.
 13. Publish/report the build result and push the image when enabled.
 
-## 5. PRIMARY OUTPUTS
+## 6. PRIMARY OUTPUTS
 
 The implementation produces the following major outputs:
 <ins>Environment-specific configuration:</ins> Separate values files for dev and prod allowing the same Kubernetes templates to be reused across environments.
@@ -241,7 +241,7 @@ The implementation produces the following major outputs:
 <ins>Helm chart:</ins> Reusable harness-delegate chart containing: Deployment, Secret and ClusterRoleBinding
 
 
-## 6. SUMMARY OF FILE RESPONSIBILITIES
+## 7. SUMMARY OF FILE RESPONSIBILITIES
 
  1. .github/workflows/delegate-image.yaml:- Builds, scans and publishes the custom Harness Delegate image.
  2. .github/workflows/vendor-delegate-image.yaml:- Handles vendor/base image publishing through the shared vendor workflow.
